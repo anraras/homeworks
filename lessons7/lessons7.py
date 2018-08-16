@@ -58,56 +58,95 @@ def function (flag, *numbers):
 function(False, 5, 7, 89, -2, -3, 4)
 '''
 #6
+
 import random
 
-
-# Empty tile, there's only one empty cell on a field:
-EMPTY_MARK = 'x'
-
-# Dictionary of possible moves if a form of: 
-# key -> delta to move the empty tile on a field.
-MOVES = {
-    'w': -4,
-    's': 4,
-    'a': -1,
-    'd': 1,
-}
+WORDS = [ 'developer', 'macos', 'github']
 
 
-def shuffle_field():
-    """
-    This method is used to create a field at the very start of the game.
-    :return: list with 16 randomly shuffled tiles,
-    one of which is a empty space.
-    """
-    field = list(range(1, 17))
-    field[-1] = EMPTY_MARK
-    random.shuffle(field)
 
-    # possible_moves = list(MOVES.keys())
-    # applied_moves = 0
-    # while applied_moves < 100:
-    #     random_move = random.choice(possible_moves)
+def game_world():
+	return random.choice(WORDS)
 
-    #     try:
-    #         field = perform_move(field, random_move)
-    #         applied_moves += 1
-    #     except IndexError:
-    #         continue
-
-    return field
+def user_letter():
+	while True:
+		letter = input('Input letter : ')
+		if letter.isalpha() == False:
+			print('It is not  letter !')
+		elif len(letter) != 1:
+			print('Input 1 letter !')
+		else :
+			return letter
 
 
-def print_field(field):
-    """
-    This method prints field to user.
-    :param field: current field state to be printed.
-    :return: None
-    """
-    for i in range(0, 16, 4):
-        print(field[i:i + 4])
-    print('\n')
+
+def initial_statuses_word(word):
+	statuses = []
+	for letters in word:
+		statuses.append(False)
+	return statuses
+
+def user_letter_veretification(word, statuses, letter):
+	if letter not in word:
+		return False
+	
+	for index, l in enumerate(word):
+		if l == letter:
+			statuses[index] = True
+
+	return True
+
+def finish_game(statuses, max_lives):
+	if max_lives <= 0:
+		print ('Game Over')
+		return True
+	for status in statuses:
+		if not status:
+			return False
+	print ('You WIN')
+	return True
+
+def print_word(word, statuses):
+	for index, letter in enumerate(word):
+		if statuses[index]:
+			print(letter, end=' ')
+		else:
+			print('_ ', end='')
+
+	print()
+
+	
 
 
-field = shuffle_field()
-print_field(field)
+
+
+	
+
+
+def main():
+	word = game_world()
+	print(word)
+	statuses = initial_statuses_word(word)
+	print(statuses)
+	max_lives = 10
+	
+	while not finish_game(statuses, max_lives):
+		print('You lives is ', max_lives)
+		print_word(word, statuses)
+		letter = user_letter()
+		result = user_letter_veretification(word,statuses,letter)
+
+		if not result:
+			print('No Letters in  word')
+			max_lives -=1
+	
+
+main()
+
+
+#7
+'''
+name = input('Input Name : ')
+x = len(name) + 6
+print(('{0:*^'+ str(x) +'}').format(name))
+'''
