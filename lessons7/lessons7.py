@@ -58,56 +58,127 @@ def function (flag, *numbers):
 function(False, 5, 7, 89, -2, -3, 4)
 '''
 #6
+'''
+
 import random
 
+WORDS = [ 'developer', 'macos', 'github']
 
-# Empty tile, there's only one empty cell on a field:
-EMPTY_MARK = 'x'
+MAX_LIVES = 10
 
-# Dictionary of possible moves if a form of: 
-# key -> delta to move the empty tile on a field.
-MOVES = {
-    'w': -4,
-    's': 4,
-    'a': -1,
-    'd': 1,
-}
+def game_world():
+	word = random.choice(WORDS)
+	return word
 
-
-def shuffle_field():
-    """
-    This method is used to create a field at the very start of the game.
-    :return: list with 16 randomly shuffled tiles,
-    one of which is a empty space.
-    """
-    field = list(range(1, 17))
-    field[-1] = EMPTY_MARK
-    random.shuffle(field)
-
-    # possible_moves = list(MOVES.keys())
-    # applied_moves = 0
-    # while applied_moves < 100:
-    #     random_move = random.choice(possible_moves)
-
-    #     try:
-    #         field = perform_move(field, random_move)
-    #         applied_moves += 1
-    #     except IndexError:
-    #         continue
-
-    return field
+def user_letter():
+	while True:
+		letter = input('Input letter : ')
+		if letter.isalpha() == False:
+			print('It is not  letter !')
+		elif len(letter) != 1:
+			print('Input 1 letter !')
+		else :
+			return letter
 
 
-def print_field(field):
-    """
-    This method prints field to user.
-    :param field: current field state to be printed.
-    :return: None
-    """
-    for i in range(0, 16, 4):
-        print(field[i:i + 4])
+
+def initial_statuses_word(word):
+	statuses = []
+	for letters in word:
+		statuses.append(False)
+		return statuses
+
+def user_letter_veretification(word, statuses, letter):
+	
+	statuses = [False,False,False,False,False,False,False]
+	for index, l in enumerate(word):
+		if l == letter:
+			statuses[index] = True
+	print(statuses)
+
+	return statuses
+
+
+def main():
+	word = game_world()
+	statuses = initial_statuses_word(word)
+	letter = user_letter()
+	user_letter_veretification(word,statuses, letter)
+
+
+
+main()
+'''
+
+#7
+'''
+name = input('Input Name : ')
+x = len(name) + 6
+print(('{0:*^'+ str(x) +'}').format(name))
+'''
+
+#8
+
+X = 'X'
+O = 'O'
+EMPLY_PLACE = None
+field = list(range(1,10))
+
+def player_side():
+	while True:
+		try:
+			side = int(input('Choise your side and input \n 1 for X :  \n 2 for O : '))
+						
+			if int(side) == 1:
+				player_side = X
+				
+				return player_side
+			elif int(side) == 2:
+				player_side = O
+				
+				return player_side
+		except ValueError:
+			print('Input 1 or 2')
+
+
+
+def print_field (field):
+	
+
+
+
+
+    for i in range(0, 10, 3) :
+        print(field[i:i + 3])
     print('\n')
 
+def field_moves(move,player_side,field):
+	field[move] = player_side
+	print(field)
+	return field
 
-field = shuffle_field()
-print_field(field)
+
+
+
+def player_move():
+	while True:
+		try:
+			move = (int(input('INput where move : ')) - 1)
+			if 0 <= move < 9:
+				return move
+		except ValueError:
+			print('Error input move : ')
+
+def main():
+	field = list(range(1,10))
+
+	player = player_side()
+	print_field(field)
+	move = player_move()
+	field = field_moves(move,player,field)
+	print_field(field)
+
+
+main()
+
+
