@@ -118,7 +118,8 @@ print(('{0:*^'+ str(x) +'}').format(name))
 '''
 
 #8
-
+'''
+import random
 X = 'X'
 O = 'O'
 EMPLY_PLACE = None
@@ -144,20 +145,15 @@ def player_side():
 
 def print_field (field):
 	
-
-
-
-
     for i in range(0, 10, 3) :
         print(field[i:i + 3])
     print('\n')
+
 
 def field_moves(move,player_side,field):
 	field[move] = player_side
 	print(field)
 	return field
-
-
 
 
 def player_move():
@@ -168,6 +164,8 @@ def player_move():
 				return move
 		except ValueError:
 			print('Error input move : ')
+
+
 
 def main():
 	field = list(range(1,10))
@@ -181,4 +179,374 @@ def main():
 
 main()
 
+'''
+'''
+import random
+X = True
+O = False
 
+
+def board():
+	board = [None for i in range(1,10)]
+	print(board)
+	return board
+
+def print_board(board):
+	for index, i in enumerate(board):
+	    if i is None :
+	        board[index] = index+1
+	    if i is True :
+	        board[index] = 'X'
+	    if i is False :
+	        board[index] = 'O'
+	for i in range(0, 10, 3) :
+		print(board[i:i + 3])        
+    
+
+    
+
+
+def choice_x_or_o():
+	while True:
+		try:
+		
+			player = int(input('Choise your  side \n 1 - X \n 2 - O \n  '))
+			if player == 1:
+				player = X
+				computer = O
+			elif player == 2:
+				player = O
+				computer = X
+			return (player, computer)
+		except (ValueError, UnboundLocalError):
+			print('You mistake !!! Input 1 or 2 plz')
+
+
+def player_step(board,player):
+	while True:
+		try:
+			step = int(input('Input number 1-9 for your  step : '))
+			if step in legal_move(board):
+				board[step - 1] = player
+				return board
+			else:
+				print('Its move  is alredy has been ')
+		except (ValueError, IndexError, UnboundLocalError):
+			print('You must input number 1 - 9 ')
+
+
+def legal_move(board):
+	move_list = []
+	print(board)
+	for i in range(0,9):
+		if board[i] is None:
+			print(board[i])
+			move_list.append(i)
+	return move_list
+
+
+def computer_choise(board,player,computer):
+	for move in legal_move(board):
+		board[move] = computer
+		if winner_combination(board) == computer:
+			return move
+		board[move] = None
+
+	for move in legal_move(board):
+		board[move] = computer
+		if winner_combination(board) == player:
+			return move
+		board[move] = None
+	move = random.choice(legal_move(board))
+	return move
+
+def computer_move(board, move):
+	board[move] = computer
+	return board
+
+
+	
+
+
+
+
+def winner_combination(board):
+	win_comb = (
+
+		(0, 1, 2),
+        (3, 4, 5),
+        (6, 7, 8),
+        (0, 3, 6),
+        (1, 4, 7),
+        (2, 5, 8),
+        (0, 4, 8),
+        (2, 4, 6)
+
+        )
+	for i in win_comb:
+		if boardp[i[0]] == board[i[1]] == board[i[2]] != None:
+			result = board[i[0]]
+			return result
+	if None not in board:
+		print("It's Draw")
+
+def winner(result):
+	if result == player:
+		print('Exelent You Win !!!')
+	elif result == computer:
+		print('Sorry but you loser !')
+
+
+
+
+
+	
+
+
+
+board = board()
+print(board)
+
+print_board(board)
+
+player, computer = choice_x_or_o()
+print(board)
+legal_move(board)
+print(legal_move(board))
+board = player_step(board,player)
+print_board(board)
+legal_move(board)
+move =computer_choise(board,player,computer)
+board = computer_move(board,move)
+print_board(board)
+
+'''
+'''
+class Printer():
+	def log(self, *values):
+		self.values = values
+		print(self.values)
+
+class FormattedPrinter(Printer):
+	def formated_log(self, *values):
+		print('***********************************************')
+		self.log(*values)
+		print('************************************************')
+
+
+a = FormattedPrinter()
+a.log(1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+b = FormattedPrinter()
+b.formated_log(1, 2, 3, 4, 5, 6, 7, 8, 9)
+'''
+
+'''
+class Animal(object):
+	def __init__(self, name, agression):
+		self.name = name
+		self.agression = agression
+
+	def attack_human(self, human):
+		if self.agression > human.agression : 
+			print('{} attack {} and win!!!'.format(self.name, human.name))
+			human.dungerous_list.append(self.name)
+			print(human.dungerous_list)
+		else :
+			print('{} Attack {} and fall'.format(self.name, human.name))
+
+class Human(Animal):
+	def __init__(self,name,agression):
+		self.dungerous_list = []
+		super().__init__(name, agression)
+
+	def is_dangerous (self, target):
+		
+		if target.name in self.dungerous_list:
+			print('{} is  dangerous for {}'.format(target.name, self.name))
+		else :
+			print('{} is not  dangerous for {}'.format(target.name, self.name))
+
+
+hercules = Human('Геракл', 50)
+prometeus = Human('Прометей', 30)
+
+hydra = Animal('Гидра', 70)
+hawk = Animal('Ястреб', 50)
+lamb = Animal('Овца', 30)
+print('\nПолучение людьми опыта общения с животными:\n ')
+hydra.attack_human(hercules)
+hawk.attack_human(hercules)
+lamb.attack_human(hercules)
+
+hydra.attack_human(prometeus)
+hawk.attack_human(prometeus)
+lamb.attack_human(prometeus)
+
+print('\nПолучение людьми опыта общения с другими людьми:\n ')
+hercules.attack_human(prometeus)
+
+print('\nПроверка накопленного людьми опыта общения с животными:\n ')
+hercules.is_dangerous(hydra)
+hercules.is_dangerous(hawk)
+hercules.is_dangerous(lamb)
+
+prometeus.is_dangerous(hydra)
+prometeus.is_dangerous(hawk)
+prometeus.is_dangerous(lamb)
+
+print('\nПроверка накопленного людьми опыта общения с другими людьми:\n ')
+prometeus.is_dangerous(hercules)
+hercules.is_dangerous(prometeus)
+'''
+'''
+m =map(lambda x: x % 5, [1, 4, 5, 30, 99])
+list(m)
+
+m2 =map(lambda x: str(x), [3, 4, 90, -2])
+list(m2)
+
+f = filter(lambda x: type(x) != str, ['some', 1, 'v', 40, '3a', str] )
+list(f)
+
+from functools import reduce
+l=[]
+r = reduce(lambda x, y : x + y, list(map(lambda x: len(x), ['some', 'other', 'value'])))
+'''
+'''
+def decorator(functions):
+	def new_function(flag, *numbers):
+		print(functions.__name__ , ' is canceled')
+
+	return new_function
+
+
+@decorator
+def jopa (flag, *numbers):
+	print(numbers)
+	
+	if flag == True:
+		list = [i for i in numbers if int(i) % 2 !=0 ]
+		print(list)
+	elif flag == False:
+		list = [i for i in numbers if int(i) % 2 ==0 ]
+		print(list)
+
+jopa(True, 5, 7, 89, -2, -3, 4)
+'''
+'''
+def way_better(filename):
+	print('reading file with way better')
+	with open(filename) as f:
+		return f.read()
+
+print(way_better('line 1.txt'))
+  
+
+def read_file(file):
+	print('reading file')
+	try:
+		f = open(file)
+		content = f.read()
+		f.close()
+	finally:
+		print('Final')
+		f.close()
+	return content
+
+
+print(read_file('line 1.txt'))
+'''
+'''
+
+def write_to_file(name, content, mode='w'):
+	with open(name, mode=mode) as f:
+		f.write(content)
+
+
+write_to_file('my new file.txt', '\nperfect \ntext \nend final', mode='a')
+'''
+
+'''
+import re
+
+def car_number(number):
+	mutch = re.fullmatch(r'\b[АВЕКМНОРСТУХ]\d\d\d[АВЕКМНОРСТУХ]{2}\d{2,3}', number)
+	mutch2 = re.fullmatch(r'\b[АВЕКМНОРСТУХ]{2}\d{3}\d{2,3}', number)
+	
+	if mutch:
+		print('Private')
+	elif mutch2:
+		print('Taxi')
+	else:
+		print('Fail')
+
+car_number('С227НА777')
+car_number('КУ22777')
+car_number('Т22В7477')
+car_number('М227К19У9')
+car_number(' С227НА777')
+'''
+'''
+def write_to_file(name,content, mode='a'):
+	with open(name, mode=mode) as f:
+		f.write(content)
+
+def read_to_file(name):
+	with open(name) as f:
+		return print(f.read())
+
+
+write_to_file('my new file.txt', '\nhey its new line')
+read_to_file('my new file.txt')'''
+'''
+import requests
+import json
+
+r = requests.get('https://jsonplaceholder.typicode.com/posts')
+d = {}
+
+for key, value in r.headers.items():
+	print(key, ' : ', value)
+	d[key] = value
+for key, value in d.items():
+	with open('heads.json', 'w') as f:
+		f.write(key, ' : ', value)
+'''
+'''
+from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route('/<str1>,<str2>,<str3>')
+def home(str1, str2, str3):
+	l = [str1, str2, str3]
+	m = max(len(str1), len(str2), len(str3))
+	for i in l:
+		if len(i) == m:
+			return i 
+
+
+if __name__ == '__main__':
+    app.run()
+    '''
+
+
+from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route('/<filename>')
+def home(filename):
+	try:
+		with open(str(filename)) as f:
+			
+			return 'Yes'
+	except FileNotFoundError:
+		return 'No'
+
+
+if __name__ == '__main__':
+    app.run()
