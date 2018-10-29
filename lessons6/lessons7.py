@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 def switch(enabled=True):
     def decor(func):
         def wrapper(*args, **kwargs):
