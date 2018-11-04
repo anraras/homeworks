@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # 1)
 
 '''number = int(input('Input your  number plz : '))
@@ -534,24 +534,8 @@ if __name__ == '__main__':
     '''
 
 
-from flask import Flask
-
-app = Flask(__name__)
 
 
-@app.route('/<filename>')
-def home(filename):
-	try:
-		with open(str(filename)) as f:
-			
-			return 'Yes'
-	except FileNotFoundError:
-		return 'No'
-
-
-if __name__ == '__main__':
-    app.run()
-=======
 # 1)
 
 '''number = int(input('Input your  number plz : '))
@@ -611,7 +595,8 @@ def function (flag, *numbers):
 
 function(False, 5, 7, 89, -2, -3, 4)
 '''
-#6
+'''
+6
 
 import random
 
@@ -699,9 +684,211 @@ main()
 
 
 #7
-'''
 name = input('Input Name : ')
 x = len(name) + 6
 print(('{0:*^'+ str(x) +'}').format(name))
 '''
->>>>>>> 6059f800a2f2c289ad28b9252b7a67b2058e1773
+'''
+from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route('/<filename>')
+def home(filename):
+	try:
+		with open(str(filename)) as f:
+			
+			return 'Yes'
+	except FileNotFoundError:
+		return 'No'
+
+
+if __name__ == '__main__':
+    app.run()
+'''
+'''
+from flask import Flask, request
+import datetime
+
+from threading import Lock
+# pip install flask-WTF
+from flask_wtf import FlaskForm
+from wtforms import StringField, validators, DateField, ValidationError
+
+def jobs(form, field):
+	if (field.data != 'IT') and (field.data != 'HR') and (field.data != 'Banks'):
+		raise ValidationError('Name must be less than 50 characters')
+
+def dates(form, field):
+	now_time = datetime.datetime.now().strftime('%d-%m-%Y')
+	if field.data[3:5] != now_time[3:5]:
+		raise ValidationError('Name must be less than 50 characters')
+
+
+class ContactForm(FlaskForm):
+    name = StringField(label='Name', validators=[
+        validators.Length(min=4, max=25)
+    ])
+    email = StringField(label='E-mail', validators=[
+        validators.Length(min=6, max=35),
+        validators.Email()
+    ])
+    job = StringField(label='JOB', validators=[
+        validators.Length(min=1, max=35), jobs
+    ])
+    date = StringField(label='date', validators = [
+    	validators.Length(10), dates
+    	])
+
+
+app = Flask(__name__)
+app.config.update(
+    DEBUG=True,
+    SECRET_KEY='This key must be secret!',
+    WTF_CSRF_ENABLED=False,
+)
+
+
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    if request.method == 'POST':
+        print(request.form)
+        form = ContactForm(request.form)
+        print(form.validate())
+
+        if form.validate():
+            return ('valid', 200)
+        else:
+            return ('invalid', 400)
+
+    if request.method == 'GET':
+        return 'hello world!', 200
+
+
+if __name__ == '__main__':
+    app.run()
+
+'''
+'''
+
+from flask import Flask
+import json
+
+app = Flask(__name__)
+
+@app.route('/locales')
+def jsondict():
+	my_dict = {'ru' : 'russian', 'en':'english', 'it': 'italian'}
+	return json.dumps(my_dict)
+
+if __name__ == '__main__':
+	app.run()
+
+	
+from flask import Flask, request
+app = Flask(__name__)
+
+@app.route('/sum/<int:first>/<int:second>')
+def my_sum(first, second):
+	t = first + second
+	return str(t)
+
+if __name__== '__main__':
+	app.run()
+
+
+'''
+'''
+from flask import Flask, request
+
+
+
+
+app = Flask(__name__)
+app.config.update(
+	DEBUG=True,
+	SECRET_KEY='This key must be secret!',
+	WTF_CSRF_ENABLE=False,
+	)
+
+@app.route('/<username>')
+def hello(username):
+	return 'hello {}'.format(username)
+
+if __name__=='__main__':
+	app.run()
+'''
+'''
+from flask import Flask, request
+import json
+
+from threading import Lock
+# pip install flask-WTF
+from flask_wtf import FlaskForm
+from wtforms import StringField, validators, DateField, ValidationError
+
+def valid_password(form, field):
+	if form.data['password'] != form.data['confimpassword']:
+		raise ValidationError('пароли не совпадают')
+
+class My_form(FlaskForm):
+	email=StringField(label='E-mail', validators=[
+		validators.Length(min=6, max = 17),
+		validators.Email()])
+	password=StringField(label='pass', validators=[
+		validators.Length(min=6)])
+	confimpassword=StringField(label='conpass', validators=[
+		validators.Length(min=6), valid_password])
+		
+
+
+app = Flask(__name__)
+app.config.update(
+    DEBUG=True,
+    SECRET_KEY='This key must be secret!',
+    WTF_CSRF_ENABLED=False,
+)
+
+
+@app.route('/form/user', methods=['GET', 'POST'])
+def home():
+    if request.method == 'POST':
+        print(request.form)
+        form = My_form(request.form)
+        #print(form.validate())
+        #print(form.errors)
+
+        if form.validate():
+            return json.dumps({'status' : 0}) 
+        else:
+        	
+
+        	 
+            return str(json.dumps(form.errors, ).encode('utf8')) + str(json.dumps({'status' : 0}))
+
+    if request.method == 'GET':
+        return 'hello world!', 200
+
+
+if __name__ == '__main__':
+    app.run()
+    '''
+from flask import Flask, request
+
+app=Flask(__name__)
+app.config.update(
+ 	DEBUG=True,
+ 	SECRET_KEY='asdfasda',
+ 	WTF_CSRF_ENABLED = False,
+ 	)
+
+@app.route('/serve/<path:filename>')
+def read_file(filename):
+ 	try:
+ 		with open(filename) as f:
+ 			return f.read()
+ 	except:
+ 		return '404'
+if __name__=='__main__':
+ 	app.run()
