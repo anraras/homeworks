@@ -874,6 +874,7 @@ def home():
 if __name__ == '__main__':
     app.run()
     '''
+'''
 from flask import Flask, request
 
 app=Flask(__name__)
@@ -892,3 +893,90 @@ def read_file(filename):
  		return '404'
 if __name__=='__main__':
  	app.run()
+'''
+'''
+from flask import Flask, request
+
+
+
+app = Flask(__name__)
+app.config.update(
+	DEBUG=True,
+	SECRET_KEY='some key',
+	)
+
+
+@app.route('/', methods=['GET','POST'])
+def home():
+	
+	return 'hello world!', 200
+
+#print(request, type(request), request.method)
+
+#with app.test_request_context('/?next=http://example.com/'):
+    #print(request, type(request), request.method)
+
+if __name__=='__main__':
+	app.run()
+'''
+import config
+from flask_wtf import FlaskForm
+from flask import Flask, request, url_for
+import random
+from wtforms import IntegerField, validators
+
+class Riddler(object): #class for riddler  numbers
+
+	number = None
+
+	@classmethod
+	def new_number(cls, max):
+		cls.number = random.randint(1, max)
+		print('Riddler number is ', cls.number)
+
+class GuessForm(FlaskForm):
+	number = IntegerField(label='Nuber is ', validators=[validators.Required()])
+
+app = Flask(__name__)
+
+app.config.from_object(config)
+
+@app.route('/', methods=['GET'])
+def home():
+	Riddler.new_number(100)
+	print(Riddler.number)
+	return ' Number is  riddler'
+
+
+@app.route('/guess', methods=['POST'])
+def guess():
+	if Riddler.number == None:
+		return '<a href="/">Вы не загадали число</a>'
+
+	form=GuessForm(request.form)
+
+	if form.validate():
+		user_number = form.number.data
+
+		if user_number == Riddler.number:
+			Riddler.new_number(100)
+			return 'You win!!! another number is  riddler'
+		elif user_number < Riddler.number:
+			return ' > '
+		elif user_number > Riddler.number:
+			return '<'
+
+	else:
+		return str(form.errors)
+
+
+
+
+
+if __name__=='__main__':
+	app.run()
+
+
+
+
+
