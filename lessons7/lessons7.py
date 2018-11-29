@@ -919,6 +919,7 @@ def home():
 if __name__=='__main__':
 	app.run()
 '''
+'''
 import config
 from flask_wtf import FlaskForm
 from flask import Flask, request, url_for
@@ -976,7 +977,50 @@ def guess():
 if __name__=='__main__':
 	app.run()
 
+'''
+from contextlib import contextmanager
 
 
+class Lock(object):
+	def __init__(self):
+		self.lock = False
 
+@contextmanager
+def locker(some_lock):
+	print(some_lock.lock)
+	some_lock.lock = True
+	yield 
+	print(some_lock.lock)
 
+with locker(Lock()) as f:
+	print(f)
+
+@contextmanager
+def loger():
+	try:
+		yield
+	except Exception as e:
+		print('logs: ', str(e))
+
+with loger():
+	1/0
+with loger():
+	's'/2
+
+from time import time, sleep
+from datetime import datetime
+
+class TimeIt(object):
+	def __enter__(self):
+		self.start_time = datetime.now()
+		print('Start time  is {}'.format(self.start_time))
+		return self
+
+	def __exit__(self, *args):
+		self.end_time = datetime.now()
+		print('End time  is {}'.format(self.end_time))
+		self.time = self.end_time - self.start_time
+
+with TimeIt() as t:
+	sleep(2)
+print('Execution time was :', t.time )
